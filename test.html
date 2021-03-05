@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.3.1/jquery.min.js"></script>
+<body>
+    <div>
+        Total: <p style="display: inline; font-size: 20px;" id="total">100</p>
+    </div><audio src="q.mp3" loop="true"></audio>
+    <div id="sm_div">
+        <div id="m_div">
+        </div>
+    </div>
+    <script id="q_scr"></script>
+    <div id="snackbar">Some text some message..</div>
+<script>
+    function playaudio(t){
+        t.play();
+    }
+    class Content{
+        name = "unset";
+        src = "?.?";
+    }
+    class Question{
+        id = -1;
+        name = "";
+        question = "";
+        bindingContent = new Content();
+        answers = [String];
+        answersStatus = [String];
+        correct = -1;
+    }
+
+    function showMessage(message, color) {
+        var x = document.getElementById("snackbar");
+        if(color === "good"){
+            x.style["color"] = "#48FF5C";
+        }
+        else if(color === "bad"){
+            x.style["color"] = "#FF5733";
+        }
+        x.innerHTML = message;
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    }
+
+    var nowQId = 0;
+
+    var _total = 300;
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    var c =  getCookie("ds");
+    if(c != undefined){
+        var spl =c.split("N");
+        if(spl.length > 1){
+            _total = parseInt(spl[0]);
+            nowQId = parseInt(spl[1]);
+        }
+    }
+    
+    
+    function SaveCookies(){
+        document.cookie =  "ds=".concat(_total.toString(), "N", nowQId.toString());
+    }
+    
+    function AddTotal(n){
+        var t = document.getElementById("total");
+        _total += n;
+        t.innerHTML = _total;
+    }
+    AddTotal(0);
+    
+    function BuildQuestion(q, id){console.log(q)
+        var _answs = "";
+        for (let index = 0; index < q.answers.length; index++) {
+            var _style = "";
+            var _props = 'onclick="cli(this)"';
+            if(q.answersStatus[index] === "disable"){
+                _style += "text-decoration: line-through;";
+                _props = "";
+            }
+            _answs += `<p data-index="${index}" ${_props} style="font-size: 35px;">• <span style=" ${_style} font-size: 35px;">${q.answers[index]}</span></p>`;
+        }
+
+        var _cont = "";
+
+        switch(q.bindingContent.name){
+            case "image":
+                _cont = `
+                    
+                    <img src="${q.bindingContent.src}" >
+                `;
+            break;
+
+            case "audio":
+                _cont = `
+                    <button onclick="document.getElementById('audio_${q.id}').play(); this.disabled=true;">PLAY AUDIO</button>
+                    <audio src="${q.bindingContent.src}" id="audio_${q.id}"></audio>
+                `;
+            break;
+        }
+
+        document.getElementById(id).innerHTML = `
+        <div>
+            <div style="display: inline; color: #7B7B7B;">q ${q.id}: </div>
+            <p style="font-size: 10px;display: inline; color: #7B7B7B;">${q.name}</p>
+            <p style="font-size: 20px;">${q.question}</p>
+            ${_cont}
+            ${_answs}
+        </div>
+        `;
+        return`
+        function cli(self){
+        if(CheckAnswer(self.dataset.index)){
+            showMessage("Correct!", "good"); 
+            AddTotal(25); 
+            LoadQuestionById(nowQId + 1); 
+            
+        }
+        else{
+            showMessage("Wrong!", "bad"); 
+            DisableAnswer(self.dataset.index);
+            AddTotal(-25);
+            LoadQuestionById(nowQId);
+        }
+        SaveCookies();
+    }
+        `;
+    }
+    function cli(self){
+        if(CheckAnswer(self.dataset.index)){
+            showMessage("Correct!", "good"); 
+            AddTotal(25); 
+            LoadQuestionById(nowQId + 1); 
+            
+        }
+        else{
+            showMessage("Wrong!", "bad"); 
+            DisableAnswer(self.dataset.index);
+            AddTotal(-25);
+            LoadQuestionById(nowQId);
+        }
+        SaveCookies();
+        
+    }
+    /*document.cookie = "12;342";
+    console.log(document.cookie);
+    var q = new Question();
+    q.answers = ["onew", "another", "tri", "chetiry"];
+    q.answersStatus = [1,1,"disable", 1];
+    q.question = "8:2(2+2)="
+    q.name = "TSAE_ ()";
+    q.id = 76522;
+        var c = new Content();
+        c.name = "image";
+        c.src = "1.jpg";
+    q.bindingContent = c;*/
+    
+   //document.write(BuildQuestion(q, "m_div"))
+    
+
+    function LoadQuestion(q){
+        document.getElementById("m_div").innerHTML = "";
+        document.getElementById("q_scr").innerHTML = BuildQuestion(q, "m_div");
+    }
+    
+    function LoadQuestionById(id){
+        nowQId = id;
+        LoadQuestion(qData[id]);
+    }
+    function CheckAnswer(index){
+        console.log(qData[nowQId]);
+        if(qData[nowQId].correct == index){
+            return true;
+        }
+        return false;
+    }
+    function DisableAnswer(index){
+        qData[nowQId].answersStatus[index] = "disable";
+    }
+
+    
+
+    var data =  `
+    [
+    {
+        "id": 0,
+        "name": "da sam ti inavlid",
+        "question": "Сколько слогов в слове превысокомногорассмотрительствующий?",
+        "bindingContent": {
+            "name": "n"
+        },
+        "answers": [
+            "11",
+            "12",
+            "13",
+            "14"
+        ],
+        "answersStatus": [
+            1,
+            1,
+            1,
+            1
+        ],
+        "correct": 2
+    },
+    {
+        "id": 1,
+        "name": "da sam ti inavlid",
+        "question": "8:2(2+2)=",
+        "bindingContent": {
+            "name": "n"
+        },
+        "answers": [
+            "1",
+            "4",
+            "8",
+            "16"
+        ],
+        "answersStatus": [
+            1,
+            1,
+            1,
+            1
+        ],
+        "correct": 3
+    },
+    {
+        "id": 2,
+        "name": "da sam ti inavlid",
+        "question": "Где на данной фотографии животное",
+        "bindingContent": {
+            "name": "image",
+            "src" : "f.jpg"
+        },
+        "answers": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "нет его тутъ"
+        ],
+        "answersStatus": [
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        "correct": 4
+    },
+    {
+        "id": 3,
+        "name": "da sam ti inavlid",
+        "question": "Что за звуки",
+        "bindingContent": {
+            "name": "audio",
+            "src" : "q.mp3"
+        },
+        "answers": [
+            "мнут бумагу",
+            "это же снег",
+            "конечно же костер",
+            "мыло режут",
+            "режут мел",
+            "ветки гнут",
+            "протекание реакции 2MgSO4+2Na2CO3+H2O=(MgOH)2CO3¯+2Na2SO4+CO2"
+        ],
+        "answersStatus": [
+            1,
+            1,
+            1,
+            1,
+            1,1,1
+        ],
+        "correct": 3
+    }
+    ,
+    {
+        "id": 4,
+        "name": "da sam ti inavlid",
+        "question": "Знаменитая банда «Дырявые сапоги» под предводительствомДжесси Джейкса ограбила почтовый поезд недалеко от городка Тамблвид и скрылась с большущим мешком серебряныхдолларов. Через пару дней бандиты встретились в таверне Муларки, чтобы поделить добычу. Джесси предложил следующий план:«Я заберу сотню долларов и одну шестую всего, что потом останется, — сказал он, — потом Пит возьмет $200 и шестую частьоставшегося. Потом Док возьмет $300 и шестую того, что останется, потом Билли возьмет $400 и шестую часть оставшегося, аБобби возьмет себе все, что останется после этого».Бобби такой план совсем не понравился, и он уже собиралсявозразить, но его опасения оказались напрасными. Придуманный Джесси план гарантировал, что все будет поделено поровну. Так сколько же серебряных долларов у них было?",
+        "bindingContent": {
+            "name": "n"
+        },
+        "answers": [
+            "2000",
+            "1500",
+            "2500",
+            "3100",
+            "1700",
+            "3200",
+            "990"
+        ],
+        "answersStatus": [
+            1,
+            1,
+            1,
+            1,
+            1,1,1
+        ],
+        "correct": 2
+    },
+    {
+        "id": 5,
+        "name": "da sam ti inavlid",
+        "question": "Что за трек",
+        "bindingContent": {
+            "name": "audio",
+            "src" : "n.mp3"
+        },
+        "answers": [
+            "BLACKPINK - 'How You Like That' DANCE PERFORMANCE VIDEO",
+            "BTS (방탄소년단) 'Dynamite' Official MV",
+            "MORGENSHTERN - 'How You Like That'"
+        ],
+        "answersStatus": [
+            1,
+            1,
+            1
+        ],
+        "correct": 1
+    }
+    ,
+    {
+        "id": 6,
+        "name": "da sam ti inavlid",
+        "question": "Что за трек",
+        "bindingContent": {
+            "name": "audio",
+            "src" : "m.mp3"
+        },
+        "answers": [
+            "ICE",
+            "Малышка",
+            "РАТАТАТАТА",
+            "TURN IT ON!"
+        ],
+        "answersStatus": [
+            1,
+            1,
+            1,1
+        ],
+        "correct": 0
+    }
+]`
+
+    var qData = JSON.parse(data);
+
+    LoadQuestionById(nowQId);
+</script>
+</html>

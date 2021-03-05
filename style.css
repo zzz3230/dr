@@ -1,0 +1,172 @@
+#input{
+    height: 100%;
+    max-block-size: 100%;
+    background-color: #444444;
+    color: #d4d4d4;
+}
+button{
+    --vh: 9.37px;
+    user-select: none;
+    -webkit-box-direction: normal;
+    box-sizing: border-box;
+    
+    margin: 0;
+    vertical-align: baseline;
+    
+    outline: none;
+    border: 0;
+    border-radius: 2px 2px 0 0;
+    cursor: pointer;
+    position: relative;
+    margin-right: 8px;
+    margin-bottom: 6px;
+    transition: all ease-out .1s;
+    top: 0;
+    text-transform: uppercase;
+    padding: 9px 14px;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    max-width: 226px;
+    background-color: #00979c;
+    color: #fff;
+    box-shadow: 0 4px #005c5f;
+}
+button :hover{
+    --vh: 9.37px;
+    user-select: none;
+    -webkit-box-direction: normal;
+    box-sizing: border-box;
+    margin: 0;
+    vertical-align: baseline;
+    outline: none;
+    border: 0;
+    border-radius: 2px 2px 0 0;
+    cursor: pointer;
+    position: relative;
+    margin-right: 8px;
+    margin-bottom: 6px;
+    transition: all ease-out .1s;
+    text-transform: uppercase;
+    top: 2px;
+    padding: 9px 14px;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    max-width: 226px;
+    background-color: #00979c;
+    color: #fff;
+    box-shadow: 0 2px #005c5f;
+}
+button:active{
+    --vh: 9.37px;
+    user-select: none;
+    -webkit-box-direction: normal;
+    box-sizing: border-box;
+    margin: 0;
+    vertical-align: baseline;
+    outline: none;
+    border: 0;
+    border-radius: 2px 2px 0 0;
+    cursor: pointer;
+    position: relative;
+    margin-right: 8px;
+    margin-bottom: 6px;
+    transition: all ease-out .1s;
+    text-transform: uppercase;
+    top: 4px;
+    padding: 9px 14px;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    max-width: 226px;
+    background-color: #00979c;
+    color: #fff;
+    box-shadow: 0 0 #005c5f;
+}
+.hc{
+    width: 50%;
+    margin: 0 auto;
+}
+#sm_div{
+    margin-top: 5%;
+    width:100%;
+    display: flex;
+    justify-content: center;
+}
+* {
+    line-height: normal;
+    font-family: typonine sans regular,lucida grande,Lucida,Verdana,sans-serif;
+    letter-spacing: .1em;
+    font-size: 100%;
+    font-size: medium;
+    color: #d4d4d4;;
+}
+
+body{
+    background-color: #222222;
+}
+
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #00a6ac;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+  }
+  
+  #snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  
+  @-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;} 
+    to {bottom: 30px; opacity: 1;}
+  }
+  
+  @keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+  
+  @-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;} 
+    to {bottom: 0; opacity: 0;}
+  }
+  
+  @keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }
+      :not(input):not(textarea),
+  :not(input):not(textarea)::after,
+  :not(input):not(textarea)::before {
+      -webkit-user-select: none;
+      user-select: none;
+      cursor: default;
+  }
+  input, button, textarea, :focus {
+      outline: none;
+  }
+  
+  /* disable image and anchor dragging */
+  a:not([draggable=true]), img:not([draggable=true]) {
+      -webkit-user-drag: none;
+      user-drag: none;
+  }
+  a[href^="http://"],
+  a[href^="https://"],
+  a[href^="ftp://"] {
+      -webkit-user-drag: auto;
+      user-drag: auto;
+  }
+
+img[src*="https://cdn.000webhost.com/000webhost/logo/footer-powered-by-000webhost-white2.png"] {
+display: none;}
